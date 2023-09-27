@@ -68,27 +68,6 @@ class JsonFileManager(FileManager):
 
     def get_vacancies_by_keyword(self, keyword: dict):
         """
-        Функция чтения из файла и получения вакансий по ключевому словую.
-        :param keyword: словарь с ключевыми словами для поиска
-        :return list_of_vac: список вакансий, выбранных по ключевым словам
-        """
-        with open(self.filename, 'r', encoding='utf-8') as f:
-            data_for_filter = f.read()
-        data = json.loads(data_for_filter)
-        filtered_vacancy = []
-        for vacancy in data:
-            flag = True
-            for k, v in keyword.items():
-                if k == 'salary_':
-                    if vacancy['salary_input'] < v:
-                        flag = False
-                        break
-            if flag:
-                filtered_vacancy.append(vacancy)
-        return filtered_vacancy
-
-    def get_vacancies_by_keyword(self, keyword: dict):
-        """
          Метод получения вакансий  из файла по ключевому слову.
         :param keyword: словарь с ключевыми словами для поиска
         :return list_of_vac: список вакансий, выбранных по ключевым словам
@@ -117,9 +96,9 @@ class JsonFileManager(FileManager):
         with open(self.filename, 'r', encoding='utf-8') as f:
             file_data = f.read()
             data = json.loads(file_data)
-        vacancies_to_delete = self.data_to_json(vacancies)
+        # vacancies_to_delete = self.data_to_json(vacancies)
         for vacancy in data:
-            if vacancy in vacancies_to_delete:
+            if vacancy in vacancies:
                 data.remove(vacancy)
         with open(self.filename, 'w', encoding='utf-8') as f:
             f.write(json.dumps(data, ensure_ascii=False, indent=4))

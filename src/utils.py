@@ -41,7 +41,7 @@ def get_top_vacancies(file_manager, user_input_n):
 def actions_for_vacancies(file_manager):
     print('Выберете действие:\n'
           '1 - получить топ-N вакансий по зарплате\n'
-          '2 - получить вакансии, отсортированные по зарплате\n'
+          '2 - Получить отфильтрованные вакансии по минимальному уровню заработной платы\n'
           '3 - удалить вакансию по указанному критерию\n'
           '0 - выйти'
           )
@@ -62,7 +62,7 @@ def actions_for_vacancies(file_manager):
                 break
             elif user_input == '3':
                 low_salary_input = int(input('Введите уровень зарплаты, вакансии с которой хотите удалить: '))
-                file_manager.delete_vacancy(file_manager.get_vacancies_by_keyword(low_salary_input))
+                file_manager.delete_vacancy(file_manager.get_vacancies_by_keyword({'salary_input': low_salary_input}))
                 print(f'Вакансии удалены из файла по критерию {low_salary_input}')
                 break
             elif user_input == '0':

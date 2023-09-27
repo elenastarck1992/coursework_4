@@ -47,19 +47,20 @@ class HeadHunterApi(APImanager):
         row_hh_data = self.get_vacancies()
         for vacancy in row_hh_data['items']:
             try:
-                filtred_vacancies = {'title': vacancy.get('name'),
-                                     'salary_from': vacancy['salary']['from'],
-                                     'description': vacancy['snippet']['requirement'],
-                                     'url': vacancy['alternate_url']}
+                filtered_vacancies = {'title': vacancy.get('name'),
+                                      'salary_from': vacancy['salary']['from'],
+                                      'description': vacancy['snippet']['requirement'],
+                                      'url': vacancy['alternate_url']}
             except (KeyError, TypeError, IndexError, ValueError):
-                filtred_vacancies = {'title': vacancy.get('name'),
-                                     'salary_from': 0,
-                                     'description': vacancy['snippet'].get('requirement'),
-                                     'url': vacancy.get('alternate_url')}
+                filtered_vacancies = {'title': vacancy.get('name'),
+                                      'salary_from': 0,
+                                      'description': vacancy['snippet'].get('requirement'),
+                                      'url': vacancy.get('alternate_url')}
 
             # создание экземпляра класса с созданием полей из словаря (распаковка словаря)
-            vac = Vacancy(**filtred_vacancies)
-            formated_vacancies.append(vac.validate_data())
+            vac = Vacancy(**filtered_vacancies)
+            vac.validate_data()
+            formated_vacancies.append(vac)
             # formated_vacancies.append(vac)
         # список из объектов класса Vacancy
         return formated_vacancies
@@ -80,7 +81,8 @@ class SuperJobApi(APImanager):
         :return: список вакансий в json файле
         """
         headers = {'X-Api-App-Id': SJ_API_TOKEN}
-        response = requests.get(SJ_API_URL, headers=headers, params={'text': self.keyword})
+        response = requests.get(SJ_API_URL, headers=headers, params={'keyword': self.keyword})
+        print(response.status_code)
         return response.json()
 
     def format_data(self):
@@ -88,23 +90,24 @@ class SuperJobApi(APImanager):
         Форматирует данные, полученные по API в единый формат
         :return: Список вакансий в едином формате
         """
-        sj_formated_vacancies = []
+        sj_formatted_vacancies = []
         row_sj_data = self.get_vacancies()
         for vacancy in row_sj_data['objects']:
             try:
-                filtred_vacancies = {'title': vacancy['profession'],
-                                     'salary_from': vacancy['payment_from'],
-                                     'description': vacancy['candidat'],
-                                     'url': vacancy['link']}
+                filtered_vacancies = {'title': vacancy['profession'],
+                                      'salary_from': vacancy['payment_from'],
+                                      'description': vacancy['candidat'],
+                                      'url': vacancy['link']}
             except (KeyError, TypeError, IndexError, ValueError):
-                filtred_vacancies = {'title': vacancy.get('profession'),
-                                     'salary_from': 0,
-                                     'description': vacancy['candidat'],
-                                     'url': vacancy['link']}
+                filtered_vacancies = {'title': vacancy.get('profession'),
+                                      'salary_from': 0,
+                                      'description': vacancy['candidat'],
+                                      'url': vacancy['link']}
 
             # создание экземпляра класса с созданием полей из словаря (распаковка словаря)
-            vac = Vacancy(**filtred_vacancies)
-            sj_formated_vacancies.append(vac.validate_data())
-            # sj_formated_vacancies.append(vac)
+            vac = Vacancy(**filtered_vacancies)
+            vac.validate_data()
+            sj_formatted_vacancies.append(vac)
+            # sj_formatted_vacancies.append(vac)
         # список из объектов класса Vacancy
-        return sj_formated_vacancies
+        return sj_formatted_vacancies
