@@ -1,4 +1,3 @@
-import os
 from abc import ABC, abstractmethod
 import requests
 
@@ -61,7 +60,6 @@ class HeadHunterApi(APImanager):
             vac = Vacancy(**filtered_vacancies)
             vac.validate_data()
             formated_vacancies.append(vac)
-            # formated_vacancies.append(vac)
         # список из объектов класса Vacancy
         return formated_vacancies
 
@@ -108,6 +106,5 @@ class SuperJobApi(APImanager):
             vac = Vacancy(**filtered_vacancies)
             vac.validate_data()
             sj_formatted_vacancies.append(vac)
-            # sj_formatted_vacancies.append(vac)
         # список из объектов класса Vacancy
         return sj_formatted_vacancies
